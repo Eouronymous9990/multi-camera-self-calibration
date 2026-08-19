@@ -86,7 +86,9 @@ All non-reference cameras and the reconstructed scene are refined jointly, acros
 **Stage 1 — Unscaled Bundle Adjustment.** Every camera's `(R, T-direction)` and every triangulated 3D point are refined jointly in one `scipy.optimize.least_squares` problem, minimizing reprojection error across all cameras at once, with translations still constrained to unit norm. A sparse Jacobian and an outer IRLS loop (3 iterations, approximating a Cauchy robust loss) progressively down-weight outlier correspondences
 
 **Stage 2 — Metric Scale Recovery from the Ball.** 
-![Multi-camera self-calibration pipeline diagram](assets/stage2_EQ.jpg)
+
+
+![stage2_EQ](assets/stage2_EQ.jpg)
 
 A YOLO ball detector scans every frame of every camera. For each non-reference camera **separately**, ball detections are gated by symmetric epipolar distance, triangulated, and converted to an estimated real-world diameter from pixel radius and depth; a MAD-based outlier filter discards inconsistent frames. Scale is recovered **per camera, not pooled into one shared factor** — correspondences are pairwise-to-cam1 only, so a single shared scale was found, in testing, to produce roughly 2x real-world measurement errors.
 
