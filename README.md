@@ -6,6 +6,10 @@ This project reconstructs a **metric 3D scene from multiple ordinary, static cam
 
 The current experimental scene involves a football/soccer player and a ball, captured by two static cameras. This is the **observation source**, not the deliverable: the player's body and the ball supply the correspondences and metric reference the calibration math needs. The output is multi-camera calibration + 3D reconstruction infrastructure, meant to sit underneath a separate, downstream analysis layer.
 
+## Live Demo
+
+[Try the live demo on Hugging Face](https://huggingface.co/spaces/abdelkader9090/analysis)
+
 ## The Problem
 
 Reconstructing accurate 3D geometry from multiple cameras requires knowing, for every camera:
