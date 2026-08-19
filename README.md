@@ -14,7 +14,7 @@ The current experimental scene involves a football/soccer player and a ball, cap
 
 Reconstructing accurate 3D geometry from multiple cameras requires knowing, for every camera:
 
-- **Intrinsics** — focal length, principal point, lens distortion.
+- **Intrinsics** — focal length, principal point, lens distortion (offline mrcal (https://mrcal.secretsauce.net/index.html)).
 - **Extrinsics** — rotation and translation relative to the other cameras.
 - **Relative geometry** — one jointly-consistent multi-camera configuration, not independent pairwise estimates.
 - **Metric scale** — cameras alone recover geometry only up to an arbitrary scale factor; an object of known physical size is needed to anchor it to real units.
