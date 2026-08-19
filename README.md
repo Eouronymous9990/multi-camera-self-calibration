@@ -38,7 +38,7 @@ A single serialized calibration file (`stereo_calibration_hybrid.pkl`) containin
 
 ![Multi-camera self-calibration pipeline diagram](assets/pipeline_overview.jpg)
 
-> The diagram labels the first stage "mrcal." In the current code, intrinsics aren't computed by any calibration routine — they're hardcoded `K`/distortion values (see Stage 0). Whether mrcal produced those numbers upstream isn't something this repository can confirm.
+> hint Some cameras have factory-provided intrinsic parameters and do not require intrinsic  recomputing.
 
 ```text
 Camera Intrinsics (pre-calibrated input)
