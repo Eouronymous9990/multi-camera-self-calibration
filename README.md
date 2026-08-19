@@ -77,11 +77,11 @@ For each cam1 <-> camK pair ([scripts/reid_match.py], [scripts/match.py]): YOLO1
 
 ### Stage 3 — Initial Extrinsic Estimation
 
-For each cam1 <-> camK pair independently (Cell 5): correspondence points are undistorted and normalized, an Essential matrix is estimated with RANSAC (falling back to a Fundamental matrix if weak), and `cv2.recoverPose` yields a rotation `R` and translation **direction** `T` (unit norm — no scale yet). This is an initialization, not a final calibration: each pair is computed independently, so different pairs aren't yet mutually consistent, and the structure still lives in an arbitrary, unscaled frame.
+For each cam1 <-> camK pair independently : correspondence points are undistorted and normalized, an Essential matrix is estimated with RANSAC (falling back to a Fundamental matrix if weak), and `cv2.recoverPose` yields a rotation `R` and translation **direction** `T` (unit norm — no scale yet). This is an initialization, not a final calibration: each pair is computed independently, so different pairs aren't yet mutually consistent, and the structure still lives in an arbitrary, unscaled frame.
 
 ### Stage 4 — Joint Optimization
 
-All non-reference cameras and the reconstructed scene are refined jointly, across three internal stages (Cell 5b):
+All non-reference cameras and the reconstructed scene are refined jointly, across three internal stages :
 
 **Stage 1 — Unscaled Bundle Adjustment.** Every camera's `(R, T-direction)` and every triangulated 3D point are refined jointly in one `scipy.optimize.least_squares` problem, minimizing reprojection error across all cameras at once, with translations still constrained to unit norm. A sparse Jacobian and an outer IRLS loop (3 iterations, approximating a Cauchy robust loss) progressively down-weight outlier correspondences
 
@@ -95,8 +95,7 @@ A YOLO ball detector scans every frame of every camera. For each non-reference c
 **Stage 3 — Scale-Aware Bundle Adjustment.** A second joint refinement, now in full metric space (3 degrees of freedom per translation, no unit-norm constraint), reusing Stage 1's exact point/observation bookkeeping and adding a per-frame ball-radius residual that anchors the reconstructed ball size to its known radius, preventing scale drift. This is the final refinement of camera geometry and 3D structure — geometrically consistent and metrically meaningful.
 
 ### Stage 5 — Ground Plane and World Coordinate System
-
-A separate stage from camera calibration: ball centers near the ground are triangulated and a plane is fit through them by SVD. That plane's normal becomes the world **+Y (up)**; world **+X** comes from projecting the camera's own +X onto the ground plane, and **+Z = X × Y** completes a right-handed frame (labeled "forward" in the code — derived from camera orientation, not any specific field/goal direction). Automated checks guard the fit: a minimum point count, an area-ratio check against near-collinear ball tracks, a relative-RMS planarity threshold, and a leave-one-out normal-stability check. A configurable offset (`GROUND_Y_OFFSET_CM`, default 9 cm) shifts the world origin down to compensate for the ball's center sitting roughly one radius above the true floor. The reference pair's `R`/`T` can optionally be re-refined jointly with the ground-plane fit. A manual, click-based alternative also exists for defining the axis.
+Ball centers near the ground are triangulated and used to fit the ground plane using SVD. The plane normal defines the world +Y (up), while +X is derived from the reference camera orientation and projected onto the ground plane, with +Z = X × Y completing the right-handed coordinate system. Automated geometric checks validate the plane fit, and an optional ground offset compensates for the ball center being above the floor. A manual click-based alternative is also available for defining the world axes.
 
 ## Validation
 
