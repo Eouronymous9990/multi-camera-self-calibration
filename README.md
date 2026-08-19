@@ -2,7 +2,7 @@
 
 ![Multi-camera views reconstructed into a metric 3D world](assets/overview.png)
 
-This project reconstructs a **metric 3D scene from multiple ordinary, static cameras** while automatically estimating the geometry relating them. Given synchronized footage from two or more cameras, the pipeline in [pipeline.ipynb](pipeline.ipynb) recovers each camera's pose relative to a shared reference frame, resolves the reconstruction's real-world (metric) scale, and defines a consistent 3D world coordinate system anchored to the physical ground — without a checkerboard or calibration wand in the scene.
+This project reconstructs a **metric 3D scene from multiple ordinary, static cameras** while automatically estimating the geometry relating them. Given synchronized footage from two or more cameras, the pipeline in [pipeline.ipynb] recovers each camera's pose relative to a shared reference frame, resolves the reconstruction's real-world (metric) scale, and defines a consistent 3D world coordinate system anchored to the physical ground — without a checkerboard or calibration wand in the scene.
 
 The current experimental scene involves a football/soccer player and a ball, captured by two static cameras. This is the **observation source**, not the deliverable: the player's body and the ball supply the correspondences and metric reference the calibration math needs. The output is multi-camera calibration + 3D reconstruction infrastructure, meant to sit underneath a separate, downstream analysis layer.
 
