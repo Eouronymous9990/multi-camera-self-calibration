@@ -1,4 +1,5 @@
 # Multi-Camera Self-Calibration and Metric 3D Reconstruction
+![3D world](demo/3D_world.gif)
 
 ![Multi-camera views reconstructed into a metric 3D world](assets/overview.png)
 
