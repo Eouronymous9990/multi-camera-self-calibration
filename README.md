@@ -65,11 +65,11 @@ Final Calibration Package (stereo_calibration_hybrid.pkl)
 
 ### Stage 0 — Camera Intrinsics (pre-calibrated input)
 
-Cell 2 hardcodes two intrinsic profiles as NumPy arrays — `K_cam12`/`dist_cam12` and `K_cam3`/`dist_cam3` — each a 3x3 `K` matrix plus a 5-parameter OpenCV radial-tangential distortion vector (`k1, k2, p1, p2, k3`). A `PATTERN` string assigns one profile per camera slot, so identical camera bodies can share a profile across a rig with more than two cameras. Nothing here *computes* these values — they're treated as already-known input, presumably calibrated upstream by some other tool.
 
+For each camera, the intrinsic parameters are either obtained from a previous calibration process or provided directly by the camera manufacturer.
 ### Stage 1 — Video Preparation
 
-Cell 1/3 configure the camera count (`NUM_CAMS`) and per-camera frame folders, and warn if frame counts differ across cameras — frames are assumed pre-synchronized by order/filename, with no timestamp-based alignment.
+Cell  configure the camera count (`NUM_CAMS`) and per-camera frame folders, and warn if frame counts differ across cameras — frames are assumed pre-synchronized by order/filename, with no timestamp-based alignment.
 
 ### Stage 2 — Cross-Camera Correspondences (OSNet Re-ID + Pose)
 
