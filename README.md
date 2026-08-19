@@ -103,11 +103,10 @@ Ball centers near the ground are triangulated and used to fit the ground plane u
 - **Stereo rectification** (Cell 7): `cv2.stereoRectify` plus a visual epipolar-line check.
 - **Interactive epipolar-line tester** (Cell 11): click a point in one view, see its epipolar line in the other.
 - **World-frame verification** (Cell AX2): checks ground points land near `Y = 0` and the recovered Y axis is close to `[0, 1, 0]`.
-- **Saved-calibration round-trip validator with 3D skeleton reconstruction** (Cell 12): reloads the saved pickle from disk, re-detects people/pose, matches people across cameras by epipolar consistency, triangulates the matched skeleton, and renders it interactively (Plotly) — the project's intended physical sanity check. **This entire cell is currently commented out** in the notebook and is not executed by the current pipeline run.
 
 ## Final Calibration Output
 
-Cell 8 saves `stereo_calibration_hybrid.pkl`, requiring both `USE_WORLD_AXIS` and `USE_SCALE` enabled. It bundles per-camera intrinsics/extrinsics/essential-fundamental matrices, the metric scale, and `WORLD_TRANSFORM`, plus flat `K1/K2/R/T/...` aliases for the cam1<->cam2 pair. The project's scope ends here — **camera calibration and metric 3D reconstruction infrastructure**, ready to be loaded by a separate downstream analysis pipeline.
+The system exports a calibration file containing the cameras' intrinsic and extrinsic parameters, metric scale, and world coordinate transformation. The output is ready to be integrated into a separate downstream 3D analysis pipeline.
 
 ## Technology Stack
 
@@ -121,8 +120,9 @@ Verified against actual imports in `pipeline.ipynb` and `scripts/`:
 - **Matplotlib** — visualization and interactive click-based tools
 - **Pillow**, **Plotly** (Plotly only for the currently disabled Cell 12 viewer)
 
-No dependency manifest (`requirements.txt` / `environment.yml`) is currently committed to the repository.
 
-## Status
+## Feature Work
 
-Integrating more than two cameras is currently in progress, aimed at giving the most accurate reconstruction results possible.
+Improving multi-camera support beyond two cameras to increase reconstruction accuracy and geometric consistency.
+
+Contributions and collaboration are welcome.
