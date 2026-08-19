@@ -26,7 +26,7 @@ This is traditionally solved with a checkerboard or calibration wand. This proje
 
 ### Input
 
-- **Camera intrinsics** per camera (K matrix + lens distortion), supplied as pre-computed values — see [Stage 0](#stage-0--camera-intrinsics-pre-calibrated-input).
+- **Camera intrinsics** per camera (K matrix + lens distortion), supplied as pre-computed values (offline separated process with mrcal)— see [Stage 0](#stage-0--camera-intrinsics-pre-calibrated-input).
 - **Synchronized frames** from each camera, showing a player and, for at least some frames, a visible ball.
 - **A known physical reference**: the ball's real radius (`BALL_RADIUS_CM`, default 11.0 cm).
 
