@@ -69,7 +69,7 @@ Final Calibration Package (stereo_calibration_hybrid.pkl)
 For each camera, the intrinsic parameters are either obtained from a previous calibration process or provided directly by the camera manufacturer.
 ### Stage 1 — Video Preparation
 
-Cell  configure the camera count (`NUM_CAMS`) and per-camera frame folders, and warn if frame counts differ across cameras — frames are assumed pre-synchronized by order/filename, with no timestamp-based alignment.
+Select the multi-camera MODE & Data used for extrinsic calibration. The observations are collected from multiple locations across the analysis area, aiming not only for a large number of observations but also for an optimal spatial distribution that provides reliable camera geometry.
 
 ### Stage 2 — Cross-Camera Correspondences (OSNet Re-ID + Pose)
 
