@@ -90,8 +90,7 @@ All non-reference cameras and the reconstructed scene are refined jointly, acros
 
 ![stage2_EQ](assets/stage2_EQ.jpg)
 
-A YOLO ball detector scans every frame of every camera. For each non-reference camera **separately**, ball detections are gated by symmetric epipolar distance, triangulated, and converted to an estimated real-world diameter from pixel radius and depth; a MAD-based outlier filter discards inconsistent frames. Scale is recovered **per camera, not pooled into one shared factor** — correspondences are pairwise-to-cam1 only, so a single shared scale was found, in testing, to produce roughly 2x real-world measurement errors.
-
+A YOLO ball detector scans every frame of every camera. For each non-reference camera separately, ball detections are gated using symmetric epipolar distance, triangulated, and used to estimate the ball's metric diameter from its pixel radius and depth. A MAD-based outlier filter removes inconsistent observations. Scale is recovered independently for each camera rather than pooled into a single shared factor, using pairwise correspondences with the reference camera (cam1).
 
 **Stage 3 — Scale-Aware Bundle Adjustment.** A second joint refinement, now in full metric space (3 degrees of freedom per translation, no unit-norm constraint), reusing Stage 1's exact point/observation bookkeeping and adding a per-frame ball-radius residual that anchors the reconstructed ball size to its known radius, preventing scale drift. This is the final refinement of camera geometry and 3D structure — geometrically consistent and metrically meaningful.
 
