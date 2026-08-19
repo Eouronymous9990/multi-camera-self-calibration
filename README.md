@@ -73,7 +73,7 @@ Select the multi-camera MODE & Data used for extrinsic calibration. The observat
 
 ### Stage 2 — Cross-Camera Correspondences (OSNet Re-ID + Pose)
 
-For each cam1 <-> camK pair ([scripts/reid_match.py](scripts/reid_match.py), [scripts/match.py](scripts/match.py)): YOLO11 (`models/yolo11x.pt`, COCO class 0) detects people in both views; each crop is embedded with **OSNet** (`osnet_ain_x1_0`, via `torchreid`) using horizontal-flip-averaged embeddings, combined with a torso-color histogram signal into a weighted similarity score, and matched with Hungarian assignment above a confidence threshold. For each matched pair, MediaPipe Pose extracts body keypoints in both crops; the intersection of visible keypoints (shoulders/hips/knees/ankles, landmark IDs `{11,12,23,24,25,26,27,28}`) becomes that frame's 2D correspondence points. An optional review UI lets a bad match be discarded before it reaches calibration.
+For each cam1 <-> camK pair ([scripts/reid_match.py], [scripts/match.py]): YOLO11 (`models/yolo11x.pt`, COCO class 0) detects people in both views; each crop is embedded with **OSNet** (`osnet_ain_x1_0`, via `torchreid`) using horizontal-flip-averaged embeddings, combined with a torso-color histogram signal into a weighted similarity score, and matched with Hungarian assignment above a confidence threshold. For each matched pair, MediaPipe Pose extracts body keypoints in both crops; the intersection of visible keypoints (shoulders/hips/knees/ankles, landmark IDs `{11,12,23,24,25,26,27,28}`) becomes that frame's 2D correspondence points. An optional review UI lets a bad match be discarded before it reaches calibration.
 
 ### Stage 3 — Initial Extrinsic Estimation
 
@@ -83,9 +83,13 @@ For each cam1 <-> camK pair independently (Cell 5): correspondence points are un
 
 All non-reference cameras and the reconstructed scene are refined jointly, across three internal stages (Cell 5b):
 
-**Stage 1 — Unscaled Bundle Adjustment.** Every camera's `(R, T-direction)` and every triangulated 3D point are refined jointly in one `scipy.optimize.least_squares` problem, minimizing reprojection error across all cameras at once, with translations still constrained to unit norm. A sparse Jacobian and an outer IRLS loop (3 iterations, approximating a Cauchy robust loss) progressively down-weight outlier correspondences; the iterate with the best true (unweighted) reprojection RMS is kept, not necessarily the last one.
+**Stage 1 — Unscaled Bundle Adjustment.** Every camera's `(R, T-direction)` and every triangulated 3D point are refined jointly in one `scipy.optimize.least_squares` problem, minimizing reprojection error across all cameras at once, with translations still constrained to unit norm. A sparse Jacobian and an outer IRLS loop (3 iterations, approximating a Cauchy robust loss) progressively down-weight outlier correspondences
 
-**Stage 2 — Metric Scale Recovery from the Ball.** A YOLO ball detector scans every frame of every camera. For each non-reference camera **separately**, ball detections are gated by symmetric epipolar distance, triangulated, and converted to an estimated real-world diameter from pixel radius and depth; a MAD-based outlier filter discards inconsistent frames. Scale is recovered **per camera, not pooled into one shared factor** — correspondences are pairwise-to-cam1 only, so a single shared scale was found, in testing, to produce roughly 2x real-world measurement errors.
+**Stage 2 — Metric Scale Recovery from the Ball.** 
+![Multi-camera self-calibration pipeline diagram](assets/stage2_EQ.jpg)
+
+A YOLO ball detector scans every frame of every camera. For each non-reference camera **separately**, ball detections are gated by symmetric epipolar distance, triangulated, and converted to an estimated real-world diameter from pixel radius and depth; a MAD-based outlier filter discards inconsistent frames. Scale is recovered **per camera, not pooled into one shared factor** — correspondences are pairwise-to-cam1 only, so a single shared scale was found, in testing, to produce roughly 2x real-world measurement errors.
+
 
 **Stage 3 — Scale-Aware Bundle Adjustment.** A second joint refinement, now in full metric space (3 degrees of freedom per translation, no unit-norm constraint), reusing Stage 1's exact point/observation bookkeeping and adding a per-frame ball-radius residual that anchors the reconstructed ball size to its known radius, preventing scale drift. This is the final refinement of camera geometry and 3D structure — geometrically consistent and metrically meaningful.
 
