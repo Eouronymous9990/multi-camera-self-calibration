@@ -1,6 +1,7 @@
-# Multi-Camera Self-Calibration and Metric 3D Reconstruction
+#3D World
 ![3D world](demo/3D_world.gif)
 
+# Multi-Camera Self-Calibration and Metric 3D Reconstruction
 ![Multi-camera views reconstructed into a metric 3D world](assets/overview.png)
 
 This project reconstructs a **metric 3D scene from multiple ordinary, static cameras** while automatically estimating the geometry relating them. Given synchronized footage from two or more cameras, the pipeline in [pipeline.ipynb] recovers each camera's pose relative to a shared reference frame, resolves the reconstruction's real-world (metric) scale, and defines a consistent 3D world coordinate system anchored to the physical ground — without a checkerboard or calibration wand in the scene.
