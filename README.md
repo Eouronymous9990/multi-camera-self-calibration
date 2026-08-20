@@ -1,4 +1,4 @@
-#3D World
+# 3D World
 ![3D world](demo/3D_world.gif)
 
 # Multi-Camera Self-Calibration and Metric 3D Reconstruction
